@@ -137,27 +137,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<script>
 	// Butona tıklandığında çalışacak fonksiyon
 	function showSeats() {
-	    // Otobüs kapasitesini al
-	    var kapasite = <?php echo $row["otobus_kapasite"]; ?>;
-	    
-	    // Butonları içerecek olan div'i seç
-	    var seatDiv = document.getElementById("seatDiv");
-	    seatDiv.innerHTML = ""; // Her seferinde içeriği temizle
-	    
-	    // Kapasite kadar buton oluştur
-	    for (var i = 1; i <= kapasite; i++) {
-	        var button = document.createElement("button");
-	        button.innerText = "Seat " + i;
-	        seatDiv.appendChild(button);
-	    }
-	    
-	    // Div'i görünür yap
-	    seatDiv.style.display = "block";
-	}
+    // Otobüs kapasitesini al
+    var kapasite = <?php echo $row["otobus_kapasite"]; ?>;
+    
+    // Butonları içerecek olan div'i seç
+    var seatDiv = document.getElementById("seatDiv");
+    seatDiv.innerHTML = ""; // Her seferinde içeriği temizle
+    
+    // Kapasite kadar buton oluştur
+    for (var i = 1; i <= kapasite; i++) {
+        var button = document.createElement("button");
+        button.innerText = "Seat " + i;
+        seatDiv.appendChild(button);
+    }
+    
+    // Div'i görünür yap
+    seatDiv.style.display = "block";
+}
 	</script>
-		<div id="seatDiv">
-	<a>a</a></div>
-
 			<?php
 			// Veritabanı bağlantısı
 			$servername = "localhost"; // Veritabanı sunucusu
