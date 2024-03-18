@@ -27,6 +27,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </head>
 
 <body>
+
+
 	<!-- top-header -->
 	<div class="top-header">
 		<div class="container">
@@ -132,6 +134,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!--- bus-midd ---->
 	<div class="bus-midd wow zoomIn animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;">
 		<div class="container boyutlan"><br>
+		<script>
+	// Butona tıklandığında çalışacak fonksiyon
+	function showSeats() {
+	    // Otobüs kapasitesini al
+	    var kapasite = <?php echo $row["otobus_kapasite"]; ?>;
+	    
+	    // Butonları içerecek olan div'i seç
+	    var seatDiv = document.getElementById("seatDiv");
+	    seatDiv.innerHTML = ""; // Her seferinde içeriği temizle
+	    
+	    // Kapasite kadar buton oluştur
+	    for (var i = 1; i <= kapasite; i++) {
+	        var button = document.createElement("button");
+	        button.innerText = "Seat " + i;
+	        seatDiv.appendChild(button);
+	    }
+	    
+	    // Div'i görünür yap
+	    seatDiv.style.display = "block";
+	}
+	</script>
+		<div id="seatDiv">
+	<a>a</a></div>
+
 			<?php
 			// Veritabanı bağlantısı
 			$servername = "localhost"; // Veritabanı sunucusu
@@ -156,17 +182,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				// Sonuçlar üzerinde döngü
 				while ($row = $result->fetch_assoc()) {
 					// Her sefer için bir buton oluştur
-					echo "<button style='background-color: #4CAF50;
-											border: none;
-											color: black; /* Yazı rengi siyah */
-											padding: 15px 32px;
-											text-align: center;
-											text-decoration: none;
-											display: inline-block;
-											font-size: 24px;
-											margin: 4px 2px;
-											cursor: pointer;
-											width: 100%;'>";
+					echo "<button onclick='showSeats()' style='background-color: #4CAF50;
+														border: none;
+														color: black; /* Yazı rengi siyah */
+														padding: 15px 32px;
+														text-align: center;
+														text-decoration: none;
+														display: inline-block;
+														font-size: 24px;
+														margin: 4px 2px;
+														cursor: pointer;
+														width: 100%;'>";
+					// Sefer bilgilerini yazdır
 					echo "<p style=\"color: black;\">Kalkış Şehri: " . $row["kalkis_sehri"] . "</p>";
 					echo "<p style=\"color: black;\">Varış Şehri: " . $row["varis_sehri"] . "</p>";
 					echo "<p style=\"color: black;\">Kalkış Saati: " . $row["kalkis_saat"] . "</p>";
@@ -176,6 +203,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					echo "</button>";
 					echo "<br>";
 				}
+				
 			} else {
 				echo "Veritabanında sefer bulunamadı.";
 			}
