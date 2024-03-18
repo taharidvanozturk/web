@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+</head>
+
+<body>
+
+<script>
+    "use strict";
+
+    function TCNOKontrol(TCNO) {
+        var tek = 0,
+            cift = 0,
+            sonuc = 0,
+            TCToplam = 0;
+
+        if (TCNO.length != 11) return false;
+        if (isNaN(TCNO)) return false;
+        if (TCNO[0] == 0) return false;
+
+        tek = parseInt(TCNO[0]) + parseInt(TCNO[2]) + parseInt(TCNO[4]) + parseInt(TCNO[6]) + parseInt(TCNO[8]);
+        cift = parseInt(TCNO[1]) + parseInt(TCNO[3]) + parseInt(TCNO[5]) + parseInt(TCNO[7]);
+
+        tek = tek * 7;
+        sonuc = tek - cift;
+        if (sonuc % 10 != TCNO[9]) return false;
+
+        for (var i = 0; i < 10; i++) {
+            TCToplam += parseInt(TCNO[i]);
+        }
+
+        if (TCToplam % 10 != TCNO[10]) return false;
+
+        return true;
+    }
+
+    function validatePhone(phone) {
+        var phonePattern = /^0[1-9]{1}[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/; // Türk telefon numarası deseni
+        return phonePattern.test(phone); // Desene uyan bir telefon numarası mı?
+    }
+
+    // Form gönderilmeden önce cep telefonu numarasını ve TC Kimlik numarasını kontrol et
+    function validateForm() {
+        var cepTelefon = document.getElementById('ceptel').value; // Cep telefonu alanını al
+        var tcNo = document.getElementById('tcno').value; // TC Kimlik numarası alanını al
+
+        if (!validatePhone(cepTelefon)) { // Cep telefonu numarasını kontrol et
+            alert("Lütfen geçerli bir Türk cep telefonu numarası giriniz. Örnek: 0xx xxx xx xx");
+            return false; // Form gönderilmesini engelle
+        }
+
+        if (!TCNOKontrol(tcNo)) { // TC Kimlik numarasını kontrol et
+            alert("Lütfen geçerli bir Türk TC Kimlik numarası giriniz.");
+            return false; // Form gönderilmesini engelle
+        }
+
+        return true; // Form göndermeye devam et
+    }
+</script>
+
+<form method="post" action="submit_registration.php" onsubmit="return validateForm()">
+    <div class="row">
+        <div class="col-md-6 mx-auto p-0">
+            <div class="card">
+                <div class="login-box">
+                    <div class="login-snip">
+                        <label for="tab-1" class="tab">Kayıt Ol</label>
+                        <div class="login-space">
+                            <div class="sign-up-form">
+                                <div class="group">
+                                    <label for="username" class="label">Kullanıcı Adı</label>
+                                    <input id="username" type="text" name="username" class="input" placeholder="Kullanıcı Adını Giriniz">
+                                </div>
+                                <div class="group">
+                                    <label for="password" class="label">Şifre</label>
+                                    <input id="password" type="password" name="password" class="input" data-type="password" placeholder="Şifrenizi Oluşturunuz">
+                                </div>
+                                <div class="group">
+                                    <label for="password" class="label">Şifre Doğrulama</label>
+                                    <input id="password" type="password" name="password" class="input" data-type="password" placeholder="Şifrenizi Yeniden Giriniz">
+                                </div>
+                                <div class="group">
+                                    <label for="email" class="label">E-Posta Adresiniz</label>
+                                    <input id="email" type="text" name="email" class="input" placeholder="E-posta Adresini Giriniz">
+                                </div>
+                                <div class="group">
+                                    <label for="ceptel" class="label">Cep Telefon Numaranız</label>
+                                    <input id="ceptel" type="tel" name="ceptel" class="input" placeholder="5xx xxx xx xx">
+                                </div>
+
+                                <div class="group">
+                                    <label for="tcno" class="label">TC Kimlik Numaranız</label>
+                                    <input id="tcno" type="text" name="tcno" class="input" placeholder="TC No Giriniz">
+                                </div>
+
+                                <div class="group">
+                                    <input type="submit" class="button" value="Kayıt Ol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+
+</html>
