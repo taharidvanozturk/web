@@ -1,3 +1,50 @@
+<?php
+function get_seats($sefer_id)
+{
+	// Assuming $conn is your database connection object
+	global $conn;
+
+	// Sefer ID'sine göre otobüsü bul
+	$sql = "SELECT * FROM sefer WHERE sefer_id = " . $sefer_id;
+	$result = $conn->query($sql);
+
+	if ($result) {
+		// Check if there are rows returned
+		if ($result->num_rows > 0) {
+			// Sonuçları al
+			$row = $result->fetch_assoc();
+			$otobus_id = $row["otobus_id"];
+
+			// Otobüs ID'sine göre otobüsü bul
+			$sql = "SELECT * FROM otobus WHERE otobus_id = $otobus_id";
+			$result = $conn->query($sql);
+
+			if ($result) {
+				// Check if there are rows returned
+				if ($result->num_rows > 0) {
+					// Sonuçları al
+					$row = $result->fetch_assoc();
+					$otobus_kapasite = $row["otobus_kapasite"];
+
+					// Koltuk sayısı kadar buton oluştur
+					for ($i = 1; $i <= $otobus_kapasite; $i++) {
+						echo "<button>Koltuk: $i</button>";
+					}
+				} else {
+					echo "Otobüs bulunamadı.";
+				}
+			} else {
+				echo "Otobüs sorgusu başarısız oldu: " . $conn->error;
+			}
+		} else {
+			echo "Sefer bulunamadı.";
+		}
+	} else {
+		echo "Sefer sorgusu başarısız oldu: " . $conn->error;
+	}
+}
+?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -110,50 +157,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			if ($conn->connect_error) {
 				die("Veritabanına bağlanılamadı: " . $conn->connect_error);
 			}
-			function get_seats($sefer_id=1)
-			{
-				// Assuming $conn is your database connection object
-				global $conn;
-
-				// Sefer ID'sine göre otobüsü bul
-				$sql = "SELECT * FROM sefer WHERE sefer_id = " . $sefer_id;
-				$result = $conn->query($sql);
-
-				if ($result) {
-					// Check if there are rows returned
-					if ($result->num_rows > 0) {
-						// Sonuçları al
-						$row = $result->fetch_assoc();
-						$otobus_id = $row["otobus_id"];
-
-						// Otobüs ID'sine göre otobüsü bul
-						$sql = "SELECT * FROM otobus WHERE otobus_id = $otobus_id";
-						$result = $conn->query($sql);
-
-						if ($result) {
-							// Check if there are rows returned
-							if ($result->num_rows > 0) {
-								// Sonuçları al
-								$row = $result->fetch_assoc();
-								$otobus_kapasite = $row["otobus_kapasite"];
-
-								// Koltuk sayısı kadar buton oluştur
-								for ($i = 1; $i <= $otobus_kapasite; $i++) {
-									echo "<button>Koltuk: $i</button>";
-								}
-							} else {
-								echo "Otobüs bulunamadı.";
-							}
-						} else {
-							echo "Otobüs sorgusu başarısız oldu: " . $conn->error;
-						}
-					} else {
-						echo "Sefer bulunamadı.";
-					}
-				} else {
-					echo "Sefer sorgusu başarısız oldu: " . $conn->error;
-				}
-			}
+			
 			// Veritabanından sefer bilgilerini al
 			$sql = "SELECT * FROM sefer, otobus";
 			$result = $conn->query($sql);
@@ -195,6 +199,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<!-- Bu div, butona tıkladığınızda otomatik olarak doldurulacak -->
 			</div>
 		</div>
+		<script>
+        // JavaScript code to call the PHP function
+        function call_get_seats(sefer_id) {
+            // Call the PHP function via AJAX
+            $.ajax({
+                type: "POST",
+                url: "get_seats.php", // Replace with the actual PHP file where the function is defined
+                data: { sefer_id: sefer_id },
+                success: function(response) {
+                    // Handle the response from the PHP function
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                }
+            });
+        }
+    </script>
 	</div>
 
 	<div class="footer-top">
