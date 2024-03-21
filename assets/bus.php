@@ -156,9 +156,6 @@ if ($result->num_rows > 0) {
 
 $conn->close(); // Veritabanı bağlantısını kapat
 ?>
-
-
-           
         </div>
     </div>
 
