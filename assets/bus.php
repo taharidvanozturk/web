@@ -93,28 +93,39 @@
 	<div class="bus-midd wow zoomIn animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;">
         <div class="container boyutlan"><br>
             <?php
-            // Include the PHP file with the get_seats function
-            include 'get_seats.php';
-            $servername = "localhost"; // Veritabanı sunucusu
-            $username = "root"; // Veritabanı kullanıcı adı
-            $password = "fd49db33b2"; // Veritabanı şifre
-            $dbname = "otobusbiletuygulama"; // Veritabanı adı
+// Include the PHP file with the get_seats function
+include 'get_seats.php';
 
-            // Veritabanı bağlantısını oluştur
-            $conn = new mysqli($servername, $username, $password, $dbname);
+$servername = "localhost"; // Veritabanı sunucusu
+$username = "root"; // Veritabanı kullanıcı adı
+$password = "fd49db33b2"; // Veritabanı şifre
+$dbname = "otobusbiletuygulama"; // Veritabanı adı
 
-            // Bağlantıyı kontrol et
-            if ($conn->connect_error) {
-                die("Veritabanına bağlanılamadı: " . $conn->connect_error);
-            }
+// Veritabanı bağlantısını oluştur
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-            // Veritabanından sefer bilgilerini al
-            $sql = "SELECT * FROM sefer, otobus";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                // Sonuçlar üzerinde döngü
-                while ($row = $result->fetch_assoc()) {
-                    echo "<button data-sefer-id='" . $row["sefer_id"] . "' style='background-color: #4CAF50;
+// Bağlantıyı kontrol et
+if ($conn->connect_error) {
+    die("Veritabanına bağlanılamadı: " . $conn->connect_error);
+}
+
+// Veritabanından sefer bilgilerini al
+$sql = "SELECT * FROM sefer,otobus WHERE sefer_id <= 2"; // Only fetch journeys with sefer_id less than or equal to 2
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $journey_ids = array(); // Store journey ids to ensure unique buttons
+
+    // Sonuçlar üzerinde döngü
+    while ($row = $result->fetch_assoc()) {
+        $sefer_id = $row["sefer_id"];
+        
+        // Check if sefer_id is unique
+        if (!in_array($sefer_id, $journey_ids)) {
+            $journey_ids[] = $sefer_id;
+
+            // Create a button for each unique sefer_id
+            echo "<button data-sefer-id='" . $row["sefer_id"] . "' style='background-color: #4CAF50;
                                     border: none;
                                     color: black;
                                     padding: 15px 32px;
@@ -135,17 +146,19 @@
                     echo "<p style=\"color: black;\">Otobüs Çeşidi: " . $row["otobus_cesidi"] . "</p>";
                     echo "</button>";
                     echo "<br>";
-                }
-            } else {
-                echo "Veritabanında sefer bulunamadı.";
-            }
+					echo "<div id=\"seatDiv\" class=\"bus-details\">";
+					echo "</div>";
+        }
+    }
+} else {
+    echo "Veritabanında sefer bulunamadı.";
+}
 
-            $conn->close(); // Veritabanı bağlantısını kapat
-            ?>
+$conn->close(); // Veritabanı bağlantısını kapat
+?>
 
-            <div id="seatDiv" class="bus-details">
-                <!-- Bu div, butona tıkladığınızda otomatik olarak doldurulacak -->
-            </div>
+
+           
         </div>
     </div>
 

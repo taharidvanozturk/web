@@ -6,9 +6,12 @@ $(document).ready(function() {
     });
 
     // Event delegation for handling clicks on dynamically added buttons
-    $('#seatDiv').on('click', 'button', function() {
-        // Your code to handle button clicks goes here
-        console.log('Button clicked!');
+    $('#seatDiv').on('click', 'button.seat-button', function() {
+        // Get the seat number from the data attribute
+        var seatNumber = $(this).data('seat-number');
+        
+        // Log the seat number to the console
+        console.log('Tıklanan Koltuk Numarası:', seatNumber);
     });
 });
 
