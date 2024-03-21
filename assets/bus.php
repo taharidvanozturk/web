@@ -137,7 +137,7 @@ if ($result->num_rows > 0) {
                                     cursor: pointer;
                                     width: 100%;'>";
                     // Sefer bilgilerini yazdır
-                    echo "<p style=\"color: black;\">sefer_id: " . $row["sefer_id"] . "</p>";
+                    echo "<p style=\"color: black; margin-right: 10px;\">sefer_id: " . $row["sefer_id"] . "</p>";
                     echo "<p style=\"color: black;\">Kalkış Şehri: " . $row["kalkis_sehri"] . "</p>";
                     echo "<p style=\"color: black;\">Varış Şehri: " . $row["varis_sehri"] . "</p>";
                     echo "<p style=\"color: black;\">Kalkış Saati: " . $row["kalkis_saat"] . "</p>";

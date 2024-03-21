@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // POST verilerinde sefer_id var mı diye kontrol et
-if(isset($_POST['sefer_id'])) {
+if (isset($_POST['sefer_id'])) {
     // POST verilerinden sefer_id'yi al
     $sefer_id = $_POST['sefer_id'];
 
@@ -43,13 +43,35 @@ if(isset($_POST['sefer_id'])) {
                     // otobus_kapasite'yi al
                     $otobus_kapasite = $row["otobus_kapasite"];
 
-                    // Koltuk numaralarını 1'den otobus_kapasite'e kadar oluştur ve butonları oluştur
-                    for($i = 1; $i <= $otobus_kapasite; $i++) {
-                        // Her koltuk için buton HTML'ini oluştur
-                        echo "<button class=\"seat-button\" data-seat-number=\"$i\">Koltuk: $i</button>";
-                        if($i % 8 === 0) {
-                            echo "<br><br>"; // Her sekiz koltukta bir alt satıra geç
+                    // Koltuk durumlarını depolamak için bir dizi oluştur
+                    $koltuk_durumları = array();
+
+                    // Koltuk durumu sorgusu
+                    $koltukdurumusql = "SELECT koltuk_id, durum FROM durum";
+                    $koltukdurumusonucu = $conn->query($koltukdurumusql);
+                    if ($koltukdurumusonucu && $koltukdurumusonucu->num_rows > 0) {
+                        // Her koltuğun durumunu diziye ekle
+                        while ($row = $koltukdurumusonucu->fetch_assoc()) {
+                            if (isset($row['koltuk_id']) && isset($row['durum'])) {
+                                $koltuk_durumları[$row['koltuk_id']] = $row['durum'];
+                            } else {
+                                // Eğer koltuk_id veya durum belirtilmemişse, devam etme
+                                continue;
+                            }
                         }
+
+                        // Koltuk numaralarını 1'den otobus_kapasite'e kadar oluştur ve butonları oluştur
+                        for ($i = 1; $i <= $otobus_kapasite; $i++) {
+                            // Koltuk durumuna göre buton rengini ayarla
+                            $button_color = ($koltuk_durumları[$i] == 1) ? "green" : "red";
+                            // Buton HTML'ini oluştur
+                            echo "<button style=\"background-color: $button_color;\" class=\"seat-button\" data-seat-number=\"$i\">Koltuk: $i</button>";
+                            if ($i % 8 === 0) {
+                                echo "<br><br>"; // Her sekiz koltukta bir alt satıra geç
+                            }
+                        }
+                    } else {
+                        echo "Koltuk durumu sorgusu başarısız oldu: " . $conn->error;
                     }
                 } else {
                     echo "Otobüs bulunamadı.";
@@ -63,8 +85,7 @@ if(isset($_POST['sefer_id'])) {
     } else {
         echo "Sefer sorgusu başarısız oldu: " . $conn->error;
     }
-} 
+}
 
 // Veritabanı bağlantısını kapat
 $conn->close();
-?>
