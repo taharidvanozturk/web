@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Green Wheels a Travel Category Flat Bootstrap Responsive Website Template | Bus :: w3layouts</title>
+	<title>Umuttepe Turizm</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="keywords" content="Green Wheels Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
@@ -23,10 +23,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script>
 		new WOW().init();
 	</script>
+	<style>
+		/* Style for the div that will be toggled */
+		.bus-details {
+			display: none;
+			background-color: #f2f2f2;
+			/* Gray background */
+			padding: 15px;
+			margin-top: 10px;
+		}
+	</style>
 	<!--//end-animate-->
 </head>
 
 <body>
+
 
 
 	<!-- top-header -->
@@ -61,63 +72,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<!--- /header ---->
-	<!--- footer-btm ---->
-	<div class="footer-btm wow fadeInLeft animated" data-wow-delay=".5s">
-		<div class="container">
-			<div class="navigation">
-				<nav class="navbar navbar-default">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-					</div>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
-						<nav class="cl-effect-1">
-							<ul class="nav navbar-nav">
-								<li><a href="about.html">About</a></li>
-								<li><a href="faq.html">Faq</a></li>
-								<li><a href="apps.html">Apps</a></li>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="travels.html">Travels</a></li>
-								<li><a href="privacy.html">Privacy Policy</a></li>
-								<li><a href="agent.html">Agent Registration</a></li>
-								<li><a href="terms.html">Terms of Use</a></li>
-								<li><a href="contact.html">Contact Us</a></li>
-								<li>Need Help?<a href="#" data-toggle="modal" data-target="#myModal3"> / Write Us </a> </li>
-								<div class="clearfix"></div>
-							</ul>
-						</nav>
-					</div><!-- /.navbar-collapse -->
-				</nav>
-			</div>
 
-			<div class="clearfix"></div>
-		</div>
-	</div>
-	<!--- /footer-btm ---->
-	<!--- banner-1 ---->
 	<div class="banner-1 ">
 		<div class="container">
 			<h1 class="wow zoomIn animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> Umuttepe Turizm - Sizin Konforunuz Bizim Önceliğimiz</h1>
 		</div>
 	</div>
-	<!--- /banner-1 ---->
-	<!--- bus-tp ---->
-	<div class="bus-tp">
-		<div class="container">
-			<p>Fare starts from : USD. 600</p>
-			<h2>Buses from California to Alabama</h2>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-	<!--- /bus-tp ---->
-	<!--- bus-btm ---->
 	<div class="bus-btm">
 		<div class="container">
 			<ul>
@@ -130,32 +90,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</ul>
 		</div>
 	</div>
-	<!--- /bus-btm ---->
-	<!--- bus-midd ---->
+
 	<div class="bus-midd wow zoomIn animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;">
 		<div class="container boyutlan"><br>
-		<script>
-	// Butona tıklandığında çalışacak fonksiyon
-	function showSeats() {
-    // Otobüs kapasitesini al
-    var kapasite = <?php echo $row["otobus_kapasite"]; ?>;
-    
-    // Butonları içerecek olan div'i seç
-    var seatDiv = document.getElementById("seatDiv");
-    seatDiv.innerHTML = ""; // Her seferinde içeriği temizle
-    
-    // Kapasite kadar buton oluştur
-    for (var i = 1; i <= kapasite; i++) {
-        var button = document.createElement("button");
-        button.innerText = "Seat " + i;
-        seatDiv.appendChild(button);
-    }
-    
-    // Div'i görünür yap
-    seatDiv.style.display = "block";
-}
-	</script>
+
+			
 			<?php
+
 			// Veritabanı bağlantısı
 			$servername = "localhost"; // Veritabanı sunucusu
 			$username = "root"; // Veritabanı kullanıcı adı
@@ -169,28 +110,70 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			if ($conn->connect_error) {
 				die("Veritabanına bağlanılamadı: " . $conn->connect_error);
 			}
+			function get_seats($sefer_id=1)
+			{
+				// Assuming $conn is your database connection object
+				global $conn;
 
+				// Sefer ID'sine göre otobüsü bul
+				$sql = "SELECT * FROM sefer WHERE sefer_id = " . $sefer_id;
+				$result = $conn->query($sql);
+
+				if ($result) {
+					// Check if there are rows returned
+					if ($result->num_rows > 0) {
+						// Sonuçları al
+						$row = $result->fetch_assoc();
+						$otobus_id = $row["otobus_id"];
+
+						// Otobüs ID'sine göre otobüsü bul
+						$sql = "SELECT * FROM otobus WHERE otobus_id = $otobus_id";
+						$result = $conn->query($sql);
+
+						if ($result) {
+							// Check if there are rows returned
+							if ($result->num_rows > 0) {
+								// Sonuçları al
+								$row = $result->fetch_assoc();
+								$otobus_kapasite = $row["otobus_kapasite"];
+
+								// Koltuk sayısı kadar buton oluştur
+								for ($i = 1; $i <= $otobus_kapasite; $i++) {
+									echo "<button>Koltuk: $i</button>";
+								}
+							} else {
+								echo "Otobüs bulunamadı.";
+							}
+						} else {
+							echo "Otobüs sorgusu başarısız oldu: " . $conn->error;
+						}
+					} else {
+						echo "Sefer bulunamadı.";
+					}
+				} else {
+					echo "Sefer sorgusu başarısız oldu: " . $conn->error;
+				}
+			}
 			// Veritabanından sefer bilgilerini al
 			$sql = "SELECT * FROM sefer, otobus";
 			$result = $conn->query($sql);
-
-			// Verileri yazdır
+			get_seats(2);
 			if ($result->num_rows > 0) {
 				// Sonuçlar üzerinde döngü
 				while ($row = $result->fetch_assoc()) {
-					// Her sefer için bir buton oluştur
-					echo "<button onclick='showSeats()' style='background-color: #4CAF50;
-														border: none;
-														color: black; /* Yazı rengi siyah */
-														padding: 15px 32px;
-														text-align: center;
-														text-decoration: none;
-														display: inline-block;
-														font-size: 24px;
-														margin: 4px 2px;
-														cursor: pointer;
-														width: 100%;'>";
+					echo "<button onclick='get_seats(" . $row["sefer_id"] . ")' style='background-color: #4CAF50;
+									border: none;
+									color: black; /* Yazı rengi siyah */
+									padding: 15px 32px;
+									text-align: center;
+									text-decoration: none;
+									display: inline-block;
+									font-size: 24px;
+									margin: 4px 2px;
+									cursor: pointer;
+									width: 100%;'>";
 					// Sefer bilgilerini yazdır
+					echo "<p style=\"color: black;\">sefer_id: " . $row["sefer_id"] . "</p>";
 					echo "<p style=\"color: black;\">Kalkış Şehri: " . $row["kalkis_sehri"] . "</p>";
 					echo "<p style=\"color: black;\">Varış Şehri: " . $row["varis_sehri"] . "</p>";
 					echo "<p style=\"color: black;\">Kalkış Saati: " . $row["kalkis_saat"] . "</p>";
@@ -200,7 +183,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					echo "</button>";
 					echo "<br>";
 				}
-				
 			} else {
 				echo "Veritabanında sefer bulunamadı.";
 			}
@@ -208,6 +190,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			$conn->close(); // Veritabanı bağlantısını kapat
 			?>
 
+
+			<div id="seatDiv" class="bus-details">
+				<!-- Bu div, butona tıkladığınızda otomatik olarak doldurulacak -->
+			</div>
 		</div>
 	</div>
 
@@ -314,51 +300,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
-				<section>
-					<div class="modal-body modal-spa">
-						<div class="writ">
-							<h4>HOW CAN WE HELP YOU</h4>
-							<ul>
-								<li class="na-me">
-									<input class="name" type="text" value="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}" required="">
-								</li>
-								<li class="na-me">
-									<input class="Email" type="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="">
-								</li>
-								<li class="na-me">
-									<input class="number" type="text" value="Mobile Number" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Mobile Number';}" required="">
-								</li>
-								<li class="na-me">
-									<select id="country" onchange="change_country(this.value)" class="frm-field required sect">
-										<option value="null">Select Issue</option>
-										<option value="null">Booking Issues</option>
-										<option value="null">Bus Cancellation</option>
-										<option value="null">Refund</option>
-										<option value="null">Wallet</option>
-									</select>
-								</li>
-								<li class="na-me">
-									<select id="country" onchange="change_country(this.value)" class="frm-field required sect">
-										<option value="null">Select Issue</option>
-										<option value="null">Booking Issues</option>
-										<option value="null">Bus Cancellation</option>
-										<option value="null">Refund</option>
-										<option value="null">Wallet</option>
-									</select>
-								</li>
-								<li class="descrip">
-									<input class="special" type="text" value="Write Description" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Write Description';}" required="">
-								</li>
-								<div class="clearfix"></div>
-							</ul>
-							<div class="sub-bn">
-								<form>
-									<button class="subbtn">Submit</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</section>
+
 			</div>
 		</div>
 	</div>
